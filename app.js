@@ -62,7 +62,7 @@ app.use(indexRoutes);
 app.use(errorRoutes);
 
 
-mongoose.connect('mongodb+srv://aceopm:aceopmmongodb@cluster0.0mrcjbt.mongodb.net/expense_tracker?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0mrcjbt.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`)
   .then((result) => {
     app.listen(PORT, () => {
       console.log(`*********************Port is running at port ${PORT}****************************`);
@@ -75,27 +75,3 @@ mongoose.connect('mongodb+srv://aceopm:aceopmmongodb@cluster0.0mrcjbt.mongodb.ne
 
 
 
-  // user.hasMany(expenses);
-  // expenses.belongsTo(user);
-  
-  // user.hasMany(orders);
-  // orders.belongsTo(user);
-  
-  // user.hasMany(fPassword);
-  // fPassword.belongsTo(user);
-  
-  // user.hasMany(downloads);
-  // downloads.belongsTo(user);
-  
-
-// sequelize
-//   .sync()
-//   //.sync({ force: true }) //it syncs our models to the database by creating the appropriate tables and relations if we have them
-//   .then((result) => {
-//     app.listen(PORT, () => {
-//       console.log(`*********************Port is running at port ${PORT}****************************`);
-//     });
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
