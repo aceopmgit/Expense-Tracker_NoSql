@@ -5,7 +5,7 @@ const path = require("path");
 const fs = require('fs');
 const mongoose = require('mongoose')
 // const helmet = require('helmet');
-const morgan = require('morgan');
+// const morgan = require('morgan');
 // const expressWinston = require('express-winston');
 // const { transports, format } = require('winston');
 require('dotenv').config();
@@ -20,7 +20,7 @@ const indexRoutes = require("./routes/index");
 const passwordRoutes = require("./routes/password");
 const errorRoutes = require('./routes/error404');
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'), { flags: 'a' });
+// const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'), { flags: 'a' });
 
 // app.use(expressWinston.logger({
 //   //transports are place where we want to save our logs
