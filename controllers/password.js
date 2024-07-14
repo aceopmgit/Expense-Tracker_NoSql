@@ -7,8 +7,7 @@ const mongoose = require('mongoose');
 
 const User = require('../models/user');
 const ForgotPassword = require('../models/forgotPassword');
-const sequelize = require('../util/database.js');
-const { where } = require('sequelize');
+
 
 
 exports.forgotpassword = async (req, res, next) => {

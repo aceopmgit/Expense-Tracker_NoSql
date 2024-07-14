@@ -4,9 +4,7 @@ const User = require('../models/user');
 const Expense = require('../models/expense');
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose');
-// const e = require('express');
-// const sequelize = require('sequelize');
-// const s = require('../util/database.js')
+
 
 function generateAccessToken(id, name, premium) {
     return jwt.sign({ userId: id, name: name, premium: premium }, process.env.TOKEN_SECRET);
