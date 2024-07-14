@@ -98,6 +98,7 @@ exports.deleteExpense = async (req, res, next) => {
     await Expense.deleteOne({ _id: id });
 
     await session.commitTransaction()
+    res.status(201).json({ status: true })
 
     // res.sendStatus(200);
   } catch (err) {

@@ -17,7 +17,7 @@ const indexRoutes = require("./routes/index");
 const passwordRoutes = require("./routes/password");
 const errorRoutes = require('./routes/error404');
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'), { flags: 'a' });
+// const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'), { flags: 'a' });
 
 // app.use(expressWinston.logger({
 //   //transports are place where we want to save our logs
@@ -48,7 +48,7 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(helmet({
   contentSecurityPolicy: false
 }))
-app.use(morgan('combined', { stream: accessLogStream }));
+// app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use(express.static(path.join(__dirname, "public")));
 const PORT = process.env.PORT || 3000;
@@ -62,7 +62,7 @@ app.use(indexRoutes);
 app.use(errorRoutes);
 
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.0mrcjbt.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`)
+mongoose.connect(process.env.CONNECTION_STRING)
   .then((result) => {
     app.listen(PORT, () => {
       console.log(`*********************Port is running at port ${PORT}****************************`);

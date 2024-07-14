@@ -44,45 +44,45 @@ exports.updateTransaction = async (req, res, next) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-        const { order_id, payment_id, status } = req.body
-        // console.log(req.body)
-        // const order = await Order.findOne({ where: { orderId: order_id } }, { transaction: t })
+        const { order_id, payment_id, status } = req.body;
 
-        if (status === 'SUCCESSFUL') {
-            const promise1 = Order.updateOne({ orderId: order_id }, { $set: { paymentId: payment_id, status: status } });
-            const promise2 = User.updateOne({ _id: req.user._id }, { $set: { premium: true } });
-            Promise.all([promise1, promise2]).then(async () => {
-                await session.commitTransaction();
-                res.status(201).json({ success: true, message: 'Transaction Successfull', token: generateAccessToken(req.user._id, undefined, true) });
-            }).catch((err) => {
-                throw new Error(err);
-            })
-        }
-        else {
-            const promise1 = Order.updateOne({ orderId: order_id }, { $set: { paymentId: payment_id, status: status } });
-            const promise2 = User.updateOne({ _id: req.user._id }, { $set: { premium: false } });
-            Promise.all([promise1, promise2]).then(async () => {
-                await session.commitTransaction();
-                res.status(201).json({ success: false, message: 'Transaction Failed' });
-            }).catch((err) => {
-                throw new Error(err);
-            })
-        }
+        const updateOrder = Order.updateOne(
+            { orderId: order_id },
+            { $set: { paymentId: payment_id, status: status } },
+            { session }
+        );
+
+        const updateUser = User.updateOne(
+            { _id: req.user._id },
+            { $set: { premium: status === 'SUCCESSFUL' } },
+            { session }
+        );
+
+        await Promise.all([updateOrder, updateUser]);
+
+        await session.commitTransaction();
+
+        res.status(201).json({
+            success: status === 'SUCCESSFUL',
+            message: status === 'SUCCESSFUL' ? 'Transaction Successful' : 'Transaction Failed',
+            token: status === 'SUCCESSFUL' ? generateAccessToken(req.user._id, undefined, true) : undefined
+        });
     } catch (err) {
         await session.abortTransaction();
         console.log(err);
         res.status(403).json({
-            message: 'Something went wrong !',
-            Error: err
-        })
-
+            message: 'Something went wrong!',
+            Error: err.message
+        });
     } finally {
         session.endSession();
     }
+};
 
 
 
-}
+
+
 
 //  exports.premiumCheck = async (req, res, next) => {
 //  const details = await User.findOne({ where: { id: req.user.id } });

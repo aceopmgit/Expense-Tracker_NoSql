@@ -22,13 +22,6 @@ const orderSchema = new Schema({
     }
 })
 
-orderSchema.pre('save', function (next) {
-    if (!this.createdDate) {
-        this.createdDate = new Date();
-    }
-    next();
-});
-
 module.exports = mongoose.model('Order', orderSchema);
 
 // const Sequelize = require('sequelize');
